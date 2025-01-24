@@ -24,19 +24,18 @@ ez::Drive chassis(
 
 // Clamp Code
 pros::adi::DigitalOut Clamp(1, false);
-
 // Intake Code
 //pros::Motor Intake (19, pros::E_MOTOR_GEARSET_06, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor Intake(19, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor IntakeA(19);
+pros::Motor IntakeSmall(13);
 // LB Code
 // 5.5 W Config
-pros::Motor LB1(7, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_COUNTS);
-pros::Motor LB2(13, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor LadyBrown(7);
 /*
 pros::Motor LB1 (7, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor LB2 (13, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);*/
 // Motor Group Declaration
-pros::Motor_Group LadyBrown({7, 13});
+pros::v5::MotorGroup Intake({IntakeA, IntakeSmall});
 
 const int distance_scale = 1;
 /**
@@ -283,9 +282,9 @@ void opcontrol() {
       Intake.brake();
     }
     // Lady Brown
-    if (master.get_digital(DIGITAL_L1)) && (LadyBrown.get_position() < 145){
+    if ((master.get_digital(DIGITAL_L1)) && (LadyBrown.get_position() < 145)){
       LadyBrown.move(50);
-    } else if (master.get_digital(DIGITAL_L2)) && (LadyBrown.get_position() > 0){
+    } else if ((master.get_digital(DIGITAL_L2)) && (LadyBrown.get_position() > 0)){
       LadyBrown.move(-50);
     } else {
       LadyBrown.brake();
